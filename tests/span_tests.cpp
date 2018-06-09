@@ -148,6 +148,20 @@ TEST_CASE("from_pointer_length_constructor")
 {
     int arr[4] = {1, 2, 3, 4};
 
+    constexpr auto N = std::numeric_limits<std::ptrdiff_t>::max();
+    {
+        int x;
+        span<int, N> s(&x, N);
+        CHECK(s.size() == N);
+        CHECK(s.data() == &x);
+    }
+
+    {
+        span<int, -1> s(arr, 1);
+        CHECK(s.size() == 1);
+        CHECK(s.data() == arr);
+    }
+
     {
         for(int i = 0; i<4 ; ++i)
         {
